@@ -1,4 +1,4 @@
-cff-version: 1.2.0
+cff-version: 1.1.0
 
 title: "Invariant Mass Spectroscopy with CMS Open Data: Reconstruction and Characterisation of Z and J/psi Resonances"
 
@@ -11,6 +11,10 @@ authors:
     given-names: "Uditangshu"
     affiliation: "The University of Manchester"
     orcid: "https://orcid.org/0009-0005-7992-3549"
+
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22843466
 
 version: "1.0.0"
 
