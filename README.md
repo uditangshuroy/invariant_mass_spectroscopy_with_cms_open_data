@@ -195,7 +195,7 @@ If you use this analysis or code in your research, please cite:
   title        = "Invariant-Mass Spectroscopy with {CMS} Open Data",
   year         = "2026",
   howpublished = "\url{https://github.com/uditangshuroy/invariant_mass_spectroscopy_with_cms_open_data}",
-  note         = "GitHub repository. Archived versions available through Zenodo. Concept DOI: \url{}"
+  note         = "GitHub repository. Archived versions available through Zenodo, doi: \url{https://doi.org/10.5281/zenodo.22843466}"
 }
 ```
 
@@ -205,10 +205,12 @@ If you use this analysis or code in your research, please cite:
 **Author**: Uditangshu Roy
 
 For any queries, business or about the project, contact me:<br>
-**Email**: [roy.uditangshu@gmail.com](mailto:roy.uditangshu@gmail.com) <br>
-**LinkedIn**: <https://www.linkedin.com/in/uditangshuroy/>
+**Email**    : [roy.uditangshu@gmail.com](mailto:roy.uditangshu@gmail.com) <br>
+**LinkedIn** : <https://www.linkedin.com/in/uditangshuroy/>
 
 <br>
+
+Archived on Zenodo. DOI: <https://doi.org/10.5281/zenodo.22843466>
 
 *This repository is maintained for archival and educational purposes. Any suggestions on potential edits or changes welcome. Get in touch at the contact above!*
 
