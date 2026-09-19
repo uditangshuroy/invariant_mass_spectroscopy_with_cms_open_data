@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+
+title: "Invariant Mass Spectroscopy with CMS Open Data: Reconstruction and Characterisation of Z and J/psi Resonances"
+
+message: "If you use this project, please cite it using the metadata below."
+
+type: software
+
+authors:
+  - family-names: "Roy"
+    given-names: "Uditangshu"
+    affiliation: "The University of Manchester"
+    orcid: "https://orcid.org/0009-0005-7992-3549"
+
+version: "1.0.0"
+
+date-released: 2026-09-19
+
+license: GPL-3.0
+
+repository-code: "https://github.com/uditangshuroy/invariant_mass_spectroscopy_with_cms_open_data"
+
+keywords:
+  - particle physics
+  - CERN
+  - CMS
+  - open data
+  - invariant mass
+  - Z boson
+  - J/psi
+  - spectroscopy
+  - Python
+  - Jupyter
+
+abstract: >
+  A computational particle physics project using CMS Open Data to reconstruct and characterise Z-boson and J/psi resonances through invariant-mass spectroscopy, event selection, statistical model comparison and line-shape fitting. The results are presented through Jupyter notebooks backed by Python scripts, and in a polished manner via a publishable report.

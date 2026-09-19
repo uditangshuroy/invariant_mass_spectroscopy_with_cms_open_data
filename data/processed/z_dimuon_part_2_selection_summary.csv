@@ -1,0 +1,7 @@
+Selection Step,Events Remaining,Cumulative Efficiency
+Initial Dataset,100000,100.0%
+Global Muon Quality Cuts,93474,93.5%
+Opposite Charge Requirement,93474,93.5%
+$p_T$ Threshold,5758,5.8%
+Pseudorapidity ($\eta$) Cut,5758,5.8%
+Invariant Mass Window,5233,5.2%

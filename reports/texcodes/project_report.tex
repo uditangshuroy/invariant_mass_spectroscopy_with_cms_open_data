@@ -1,0 +1,529 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.5cm]{geometry} % Standard 2.5cm margins
+\usepackage{titlesec}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage{url}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{threeparttable}
+\usepackage{chngcntr}
+\usepackage{placeins}  % provides \FloatBarrier
+
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{5}
+
+\newcommand{\totalwords}{4,691} % replace with your count
+
+\counterwithin{table}{section}
+\counterwithin{figure}{section}
+
+\numberwithin{equation}{section}
+
+\setlength{\headheight}{13.6pt}
+\addtolength{\topmargin}{-1.6pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+% Header configuration
+\lhead{Invariant-Mass Spectroscopy with CMS Open Data}
+\rhead{Uditangshu Roy}
+
+% Footer configuration
+\cfoot{\thepage}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\raggedright} 
+  {\thesection}                           
+  {1em}                                   
+  {} 
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+    
+    \vspace*{2cm} % Pulls the title down from the top margin
+
+    % 1. Big Title
+    {\Huge\bfseries Invariant Mass Spectroscopy with CMS Open Data \par}
+    \vspace{0.4cm}
+    
+    % 2. Subtitle
+    {\Large\itshape Reconstruction of $Z$-boson and $J/\psi$-meson Invariant-Mass Resonances \par}
+    
+    \vspace{2.5cm} % Space lines before personal information
+    
+    % 3. Author Info & Institutional Affiliation
+    {\large\bfseries Uditangshu Roy \par}
+    \vspace{0.2cm}
+    {\large Undergraduate \par}
+    \vspace{0.2cm}
+    {Department of Physics and Astronomy\par}
+    \vspace{0.2cm} 
+    {The University of Manchester \par}
+    
+    \vspace{2.5cm} % Space lines before date
+    
+    % 4. Date
+    {\large September 2026 \par}
+    
+    \vfill
+
+    \end{center}
+    
+    % 5. Abstract
+
+\begin{abstract}
+    This report describes an invariant-mass spectroscopy study of the $Z$ boson and $J/\psi$ meson using educational samples of CMS Open Data from 2011 proton--proton collisions at the LHC. Muon and electron four-momenta are reconstructed from their transverse momentum, pseudorapidity and azimuthal angle, and combined into the invariant mass of the parent resonance using both an exact relativistic calculation and a massless-lepton approximation. The analysis proceeds in two stages. A simplified 10,000-event dimuon sample, together with a corresponding di-electron sample, is first used to establish the reconstruction procedure and test the validity of the massless approximation. A larger, 100,000-event dimuon sample is then used to independently validate the supplied kinematic variables and to apply a sequence of muon-quality, charge, kinematic and mass-window selection criteria that isolate a clean $Z \rightarrow \mu^+\mu^-$ signal. The resulting invariant-mass distribution is fitted with Gaussian, Breit--Wigner and Voigt line shapes, compared using $\chi^2$, reduced $\chi^2$, $p$-value, AIC and BIC statistics, and the same procedure is repeated for a $J/\psi \rightarrow \mu^+\mu^-$ sample. Both resonances are reconstructed close to their accepted masses, and the Voigt profile, which combines the intrinsic Breit--Wigner width with Gaussian detector resolution, gives the best description of the $Z$ lineshape. The results confirm that the essential techniques of invariant-mass spectroscopy can be reproduced consistently across decay channels and mass scales using openly available collider data.
+\end{abstract}
+
+    \vspace{0.5cm}
+
+\end{titlepage}
+
+\tableofcontents
+\listoftables
+\listoffigures
+
+
+\section{Introduction}
+
+The invariant mass of a system of particles is one of the most powerful tools available for identifying short-lived resonances in particle physics. Because an unstable parent particle typically decays before it can be detected directly, its presence must instead be inferred from the combined four-momenta of its measurable decay products. When enough such decays are collected, the reconstructed invariant-mass distribution accumulates around the mass of the parent particle, producing a resonance peak whose position, width and shape encode information about the underlying particle and the process that produced it \cite{griffiths1987elementaryparticles, thomson2013modernparticle}.
+
+\subsection{Project Objectives}
+
+This principle underlies much of the physics programme at the Large Hadron Collider (LHC), where general-purpose detectors such as the Compact Muon Solenoid (CMS) \cite{cmscollaboration2008cms} record the trajectories and energies of particles produced in proton--proton collisions. This project applies invariant-mass spectroscopy to two well-known dilepton resonances: the $Z$ boson, a comparatively broad electroweak gauge boson with a mass of approximately 91.2 GeV, and the $J/\psi$ meson, a narrow charmonium bound state with a mass of approximately 3.1 GeV \cite{pdgtakahashizboson2026review, pdgtakahashijpsi2026review}. Despite differing in mass by more than a factor of twenty and arising from entirely different production mechanisms, both particles decay to a pair of oppositely charged muons with a measurable branching ratio, making them convenient and complementary benchmarks for testing the same reconstruction and fitting methodology.
+
+The analysis is based on educational samples of CMS Open Data recorded during 2011 collisions at the LHC \cite{mccauley2019zmumusimplified, mccauley2019zeesimplified, mccauley2017zmumu, mccauley2017jpsimumu}, and is structured in two parts. The first uses a simplified 10,000-event dimuon sample, together with a corresponding di-electron sample, to develop and test the basic four-vector reconstruction procedure and to examine the validity of the commonly used massless-lepton approximation. The second uses a larger, 100,000-event sample to independently validate the supplied kinematic variables, apply a series of event-selection criteria appropriate to an LHC analysis, and fit the resulting $Z \rightarrow \mu^+\mu^-$ and $J/\psi \rightarrow \mu^+\mu^-$ invariant-mass distributions with Gaussian, Breit--Wigner and Voigt line shapes.
+
+\subsection{Motivation}
+
+Beyond reproducing two textbook resonances, this project is motivated by the opportunity to work through a complete, if simplified, analysis chain of the kind used in real collider physics: reconstructing physical four-vectors from detector-level variables, cross-checking those variables for internal consistency, applying a transparent set of selection criteria, and using standard statistical tools: $\chi^2$, AIC and BIC, to choose between competing physical models rather than relying on visual judgement alone. Working with two resonances of very different natural width and origin also provides a natural test of robustness: if the same pipeline recovers both the broad, electroweak $Z$ resonance and the narrow, QCD-bound $J/\psi$ state, this is good evidence that the underlying kinematic and statistical machinery, rather than any feature specific to one dataset, is responsible for the result. CMS Open Data is well suited to this purpose, since it provides a genuine, if reduced, LHC dataset without requiring access to the full CMS software framework or proprietary data \cite{cmscollaboration2008cms, mccauley2019zmumusimplified, mccauley2019zeesimplified, mccauley2017zmumu, mccauley2017jpsimumu}.
+
+\section{Theoretical Background}
+
+The reconstruction of decaying particles relies on the relativistic kinematics of their decay products. In high-energy physics, natural units are conventionally used where the quantities of the speed of light and the reduced Planck constant are set to 1, i.e., $c=1$ and $\hbar=1$ \cite{perkins1987highenergy}. This simplifies the equations and calculations without the need to carry around factors of quantities such as $c$ and $\hbar$, which occur frequently in the equations of motion and energy-momentum relations. This convention allows mass, momentum and energy to be expressed in electron-volts ($\text{eV}$).
+
+\subsection{Four-Momentum and Invariant Mass}
+
+In special relativistic kinematics, the four-momentum of a particle is defined as a four-vector that combines its energy and three-momentum components. In natural units, it is mathematically described as:
+
+\begin{equation} p^\mu = \left(E,\,p_x,\,p_y,\,p_z\right). \end{equation}
+
+The invariant mass ($M$) of a particle is a Lorentz scalar that represents the mass of the particle in its rest frame, and is independent of the overall motion of the system. Using the Minkowski metric tensor, the invariant mass expands to \cite{griffiths1987elementaryparticles}:
+
+\begin{equation} M^2 = \sum_{\mu,\nu} g_{\mu\nu} p^\mu p^\nu, \end{equation}
+
+\begin{sloppypar}
+
+where $g_{\mu\nu} = \text{diag} (1, -1, -1, -1)$ is the Minkowski metric tensor, and $\mathbf{p}$ is the three-momentum vector of the particle. For a two-particle system, the invariant mass can be represented in simpler terms, and calculated from the four-momenta of the individual particles as:
+
+\end{sloppypar}
+
+\begin{equation} M^2 = p_{\mu}p^{\mu} = (E_1 + E_2)^2 - |\mathbf{p}_1 + \mathbf{p}_2|^2, \end{equation}
+
+where $E_1$ and $E_2$ are the energies of the two particles, and $\mathbf{p}_1$ and $\mathbf{p}_2$ are their three-momentum vectors. The invariant mass is a crucial quantity in particle physics as it allows for the identification of resonances corresponding to specific particles, such as the $Z$ boson or the $J/\psi$ meson examined in this study, by analyzing the distribution of invariant masses reconstructed from their decay products.
+
+The quantity therefore provides a useful tool for identifying these unstable particles from their decay products. If an unstable parent particle decays into two detectable daughter particles, such as a dimuon decay ($X \to \mu^+ \mu^-)$, where $X$ is the parent particle, the invariant mass calculated from their measured four-momenta will cluster around the mass of the parent resonance, subject to detector resolution, physical width and reconstruction effects \cite{thomson2013modernparticle}.
+
+Utilising the tensor component relation $M^2 = (p_1 + p_2)_\mu (p_1 + p_2)^\mu$, and considering that both daughter particles have the same mass ($m$, let), equation (2.3) can be expanded to yield:
+
+\begin{equation} M_{exact}^2 = 2(m^2 + E_1 E_2 - \mathbf{p}_1 \cdot \mathbf{p}_2). \end{equation}
+
+For the dimuon events considered in this project, the two measured leptons are therefore sufficient to reconstruct the invariant mass of the parent system. The use of the subscript ``exact" in equation (2.4) is to indicate that this is the exact invariant mass of the parent particle, which can be reconstructed from the measured four-momenta of the daughter particles. A massless approximation is presented later for the daughter particles with the aid of the kinematic variables defined in the subsequent section, which is valid for the daughter particles considered in this analysis, since their mass is negligible compared to the energies involved in the collisions at the LHC and of the parent particles being reconstructed. This approximation simplifies the calculations and is commonly used in high-energy physics analyses. 
+
+\subsection{Kinematic Variables}
+
+In hadron colliders like the LHC, the initial longitudinal momenta of the colliding partons (quarks and gluons) are unknown. Therefore, physical quantities are expressed using variables invariant under longitudinal boosts: transverse momentum ($p_T$), pseudorapidity ($\eta$), and azimuthal angle ($\phi$). The transverse momentum is defined as the component of a particle's momentum perpendicular to the beam axis ($z$-axis), and is computed from the $x$ and $y$ components of the momentum. The pseudorapidity is a spatial coordinate that describes the angle of a particle relative to the beam axis, and is defined as \cite{cmscollaboration2008cms}:
+
+\begin{equation} \eta = -\ln\left[\tan\left(\frac{\theta}{2}\right)\right], \end{equation}
+
+where $\theta$ is the polar angle of the particle's momentum vector with respect to the beam axis ($z$-axis). The azimuthal angle $\phi$ is measured from the $x$-axis in the $x$-$y$ plane and the radial coordinate in this plane is denoted by $r$ \cite{cmscollaboration2008cms}. The transverse momentum, pseudorapidity, and azimuthal angle are used in the analysis presented here, since they provide a convenient way to describe the kinematics of particles produced in high-energy collisions. The Cartesian components of a particle's momentum and its energy can be mapped from these variables:
+
+\begin{equation} \mathbf{p} = \begin{pmatrix} \: p_{T} \cos{\phi} \: \\ \: p_{T} \sin{\phi} \: \\ \: p_{T} \sinh{\eta} \: \end{pmatrix}. \end{equation}
+
+Considering the relation $|\mathbf{p}|^2 = p_T^2 + (p_T \sinh{\eta})^2$ = $p_T^2 \cosh^2{\eta}$, the total energy of the two daughter particles can be expressed as:
+
+\begin{equation} E_{\text{tot}} = \sum_{i=1}^{2} \sqrt{p_{T_i}^2 \cosh^2{\eta_i} + m_i^2}, \end{equation}
+
+where $m_i$ is the mass of the $i^{\text{th}}$ daughter particle. Hence, from equation (2.4), the dot product of the two three-momentum vectors can be expressed as:
+
+\begin{equation} \mathbf{p}_1 \cdot \mathbf{p}_2 = p_{T,\,1} p_{T,\,2} \left\{ \cos{(\phi_1 - \phi_2)} + \sinh\eta_1 \sinh\eta_2 \right\}. \end{equation}
+
+The invariant mass of the parent particle can therefore be reconstructed from the measured transverse momenta, pseudorapidities and azimuthal angles, and from the derived energies, of the two daughter particles.
+
+\subsection{Massless Approximation}
+
+One can consider the mass of the daughter particles negligible, $m \approx 0$, as initially described in section (2.2). Applying this approximation, and then substituting the now simplified equations (2.7) and (2.8) into equation (2.4), the invariant mass of the parent particle can be expressed without any energy terms as:
+
+\begin{equation} M_{\text{approx}}^2 = 2 p_{T,\,1} p_{T,\,2} \left\{ \cosh(\eta_1 - \eta_2) - \cos(\phi_1 - \phi_2) \right\}. \end{equation}
+
+\subsection{$Z$-Boson and $J/\psi$-Meson Resonances}
+
+These parent particles are unstable and decay into daughter particles. They have very short lifetimes, and thus cannot be directly detected by the detector hardware. For instance, the two parent particles considered in this study are the $Z$ boson and the $J/\psi$ meson, have lifetimes of order $10^{-25}$ seconds and $10^{-21}$ seconds respectively \cite{pdgnavas2024review}. 
+Due to the quantum mechanical uncertainty relation $\Delta E \Delta t \geq \frac{\hbar}{2}$ \cite{wigner1997quantummechanics}, the short lifetimes of these particles lead to a natural width in their mass distributions, which can be described by a Breit--Wigner distribution \cite{pdgtakahashizboson2026review}. The $Z$ boson has a natural width of approximately 2.5 GeV, while the $J/\psi$ meson has a much narrower width of approximately 92.6 keV \cite{pdgtakahashijpsi2026review}.
+
+The $Z$ boson is a neutral-charge vector boson that mediates the weak nuclear force, and has a mass of approximately 91.2 GeV \cite{pdgtakahashizboson2026review}. The $J/\psi$ meson is a bound state of a charm quark and anti-charm quark ($c\bar{c}$), and has a mass of approximately 3.1 GeV \cite{pdgtakahashijpsi2026review}. Both particles can decay into a pair of oppositely charged muons ($\mu^+ \mu^-$), with the $Z$ boson having a branching ratio of approximately 3.37\% and the $J/\psi$ meson having a branching ratio of approximately 5.96\% \cite{pdgtakahashizboson2026review, pdgtakahashijpsi2026review}. These decay channels are particularly useful for experimental studies, as muons are relatively easy to detect and measure accurately in high-energy physics experiments. By reconstructing the invariant mass of the muon pairs, one can identify the presence of these resonances in the data.
+
+\subsection{Natural Line Width and Breit--Wigner Distribution}
+
+Unstable particles possess a finite mean lifetime $\tau$, which corresponds to an intrinsic decay width $\Gamma = \hbar / \tau$ via the quantum mechanical energy-time uncertainty principle \cite{wigner1997quantummechanics}. Particles such as the $Z$-boson exhibit a broad mass distribution described by a Breit--Wigner distribution, which is a Lorentzian function that characterizes the probability of measuring a particular invariant mass $M$ for the decaying particle. The Breit--Wigner distribution function $f_{\text{BW}}(M)$ is given by \cite{breitwigner1936slowneutrons}:
+
+\begin{equation} f_{\text{BW}}(M) = \frac{k}{(M^2 - M_0^2)^2 + M_0^2 \Gamma^2}, \end{equation}
+
+where $M_0$ is the nominal mass of the particle and $k$ is a normalization constant. In the non-relativistic or near-resonance limit ($M \approx M_0$), the denominator can be factored as $(M^2 - M_0^2)^2 \approx 4 M_0^2 (M - M_0)^2$, reducing the function to the standard Cauchy-Lorentz form with a half-width at half-maximum (HWHM) $\gamma = \Gamma/2$. The full width at half-maximum ($\text{FWHM}_{\text{BW}}$) corresponds directly to the natural decay width:
+
+\begin{equation} \text{FWHM}_{\text{BW}} = 2\gamma = \Gamma. \end{equation}
+
+\subsection{Detector Resolution and Gaussian Smearing}
+
+Particles with long lifetimes, such as the $J/\psi$ meson ($\Gamma_{J/\psi} \approx 93\text{ keV}$) \cite{pdgtakahashijpsi2026review}, have intrinsic widths far smaller than the momentum resolution of modern track detectors ($\sigma_{\text{det}} \sim \mathcal{O}(10 - 100)\text{ MeV}$) \cite{salvucci2012muonres}. For such narrow resonances, the intrinsic width can be approximated as a Dirac delta function $\delta(M - M_0)$ \cite{cowan1998statistical}, and the observed peak shape is dominated entirely by Gaussian measurement errors. The Gaussian function describes the probability of measuring a particular invariant mass $M$ given the true mass $M_0$ and the detector resolution $\sigma$. It is mathematically expressed as \cite{squires2001statistics}:
+
+\begin{equation} f_{\text{Gauss}}(M) = \frac{1}{\sqrt{2\pi}\sigma} \exp\left( -\frac{(M - M_0)^2}{2\sigma^2} \right) \end{equation}
+
+The full width at half-maximum of the Gaussian detector response ($\text{FWHM}_{\text{Gauss}}$) is analytically related to the standard deviation $\sigma$ by:
+
+\begin{equation} \text{FWHM}_{\text{Gauss}} = 2\sqrt{2\ln 2}\,\sigma \approx 2.35482\,\sigma. \end{equation}
+
+\subsection{Voigt Profile}
+
+The Voigt profile is a probability distribution that arises from the convolution of a Breit--Wigner (Cauchy-Lorentz) distribution and a Gaussian distribution, commonly used in branches of spectroscopy and diffraction. The defining convolution integral is evaluated as:
+
+\begin{equation} V(M; \sigma, \Gamma) = \int_{-\infty}^{\infty} f_{\text{BW}}(M') f_{\text{Gauss}}(M - M') \, dM', \end{equation}
+
+where $f_{\text{BW}}(M')$ is the Breit--Wigner distribution and $f_{\text{Gauss}}(M - M')$ is the Gaussian distribution, and $M'$ is the variable of integration. Utilizing the Faddeeva function \cite{lehtinen2010errorfunctions} evaluated for $z = \frac{M + i\gamma}{\sigma \sqrt{2}}$, the Voigt profile can be expressed in a more computationally efficient form as:
+
+\begin{equation} V(M; \sigma, \gamma) = \frac{\operatorname{Re}[\omega(z)]}{\sqrt{2\pi} \sigma}, \end{equation}
+
+where $\sigma$ is the standard deviation of the Gaussian component, and $\gamma$ is the half-width at half-maximum (HWHM) of the Lorentzian component; $M$ is the invariant mass, and is the variable of interest in this case. It is the shift from the line center.
+
+Unlike pure Gaussian or Lorentzian functions, the Voigt profile does not possess an exact closed-form algebraic expression for its full width at half-maximum. However, it can be approximated within an accuracy of $0.02\%$ across all parameter regimes using the empirical relation established by Olivero and Longbothum \cite{olivero1977empirical}:
+
+\begin{equation}
+\text{FWHM}_V \approx 0.5343\, f_L + \sqrt{0.2169\, f_L^2 + f_G^2},
+\label{eq:fwhm_voigt}
+\end{equation}
+
+where $f_L \equiv \text{FWHM}_{\text{BW}} = \Gamma$ and $f_G \equiv \text{FWHM}_{\text{Gauss}} = 2\sqrt{2\ln 2}\,\sigma$. Equation~\eqref{eq:fwhm_voigt} satisfies the correct asymptotic limits, reducing exactly to $f_G$ when $f_L \to 0$ (purely detector-dominated) and to $f_L$ when $f_G \to 0$ (purely lifetime-dominated) \cite{olivero1977empirical}.
+
+
+\section{Data and Computational Methodology}
+
+\subsection{CMS Open Data}
+
+The analysis is performed using publicly released proton-proton ($pp$) collision data recorded by the Compact Muon Solenoid (CMS) experiment at the European Organization for Nuclear Research (CERN) Large Hadron Collider (LHC). The first part of the project utilised simplified datasets, which were derived from the full CMS Open Data samples and made available for educational purposes. These datasets contain a reduced number of events and are formatted in an educationally accessible manner, allowing for easier analysis and understanding of the underlying physics.
+
+The datasets were selected to allow the reconstruction of dilepton resonances from measured particle properties, with the primary analysis in the first part focused on the $Z\rightarrow\mu^+\mu^-$ decay channel \cite{mccauley2019zmumusimplified}. A corresponding $Z\rightarrow e^+e^-$ sample \cite{mccauley2019zeesimplified} was also considered for a lepton channel comparison.
+
+While the dataset used in the second part of the project was still a simplified version of the full CMS Open Data, it was the parent dataset from which the first dataset was derived. As such, it contained a larger number of events and was more representative of the actual data collected by the CMS experiment. The second part of the project first focused on the reconstruction of the previously analysed $Z\rightarrow\mu^+\mu^-$ decay channel, however, now with a larger dataset, thus requiring a more robust statistical approach including validations and selection criteria to be applied \cite{mccauley2017zmumu}. The second part concluded with comparing this to the reconstruction of the $J/\psi\rightarrow\mu^+\mu^-$ decay channel \cite{mccauley2017jpsimumu}, which is a lower-mass resonance compared to the $Z$ boson. The analysis methodology was similar to that used for the $Z$ boson, but with some modifications to account for the different kinematic properties of the $J/\psi$ meson and its decay products.
+
+The analysis was implemented in Python using NumPy, pandas, Matplotlib and SciPy. Jupyter notebooks were used to organise the analysis into sequential stages, while reusable functions for four-vector calculations, plotting, statistical analysis and peak fitting were maintained separately in the project source directory.
+
+\subsection{Dataset Variables}
+Each event in the processed dataset provides recorded kinematic measurements for the two leading transverse-momentum muon candidates, designated as indices $1$ and $2$. 
+
+\begin{table}[htbp]
+    \begin{center}
+    \begin{threeparttable}
+        \caption{Dataset dictionary for relevant variables and their physical meanings.}
+        \label{tab:dataset_dictionary}   
+            \begin{tabular}{ | l | l | l | }
+                \hline
+                \multicolumn{1}{|c|}{\textbf{Variable}} & \multicolumn{1}{|c|}{\textbf{Meaning}} & \multicolumn{1}{|c|}{\textbf{Units}} \\ \hline
+                $E_1$, $E_2$ & Reconstructed energies & GeV \\
+                $p_{T,\,1}$, $p_{T,\,2}$ & Transverse momenta & GeV \\
+                $\eta_1$, $\eta_2$ & Pseudorapidities & --- \\
+                $\phi_1$, $\phi_2$ & Azimuthal angles & rad \\
+                $p_{x,\,1}$, $p_{x,\,2}$ & $x$-components of momenta & GeV \\
+                $p_{y,\,1}$, $p_{y,\,2}$ & $y$-components of momenta & GeV \\
+                $p_{z,\,1}$, $p_{z,\,2}$ & Longitudinal ($z$)-components of momenta & GeV \\
+                $Q_1$, $Q_2$ & Electric charges & $e$ \\
+                $\text{type1}$, $\text{type2}$ & Muon reconstruction types & --- \\
+                \hline
+        \end{tabular}
+    \end{threeparttable}
+    \end{center}
+\end{table}
+
+The relevant variables for the analysis are summarised in Table~\ref{tab:dataset_dictionary}, along with their physical meanings and units. The same general structure was used for the electron sample as well as the $J/\psi$-meson sample, with the appropriate lepton and meson mass applied respectively when an exact relativistic calculation is performed.
+
+\FloatBarrier
+\subsection{Kinematic Reconstruction}
+The supplied reconstructed quantities were used both directly and to independently reconstruct related kinematic observables. This provided a means of verifying that the numerical values used in the invariant-mass calculation were internally consistent. Four-momentum components $p^\mu = (E, p_x, p_y, p_z)$ were constructed for each muon from the recorded cylindrical variables:
+
+\begin{equation}
+p_x = p_T \cos\phi, \quad p_y = p_T \sin\phi, \quad p_z = p_T \sinh\eta, \quad E = \sqrt{|\mathbf{p}|^2 + m_\mu^2}.
+\end{equation}
+
+The four-momenta of the two muons are transformed into the invariant mass of the parent particle using equation (2.3). The massless approximation was also applied to the daughter particles, and the invariant mass was calculated using equation (2.9). The reconstructed invariant masses were then compared to the supplied energy values to ensure consistency.
+
+For the invariant-mass calculation itself, the supplied energy values were retained rather than replacing them with an independently reconstructed energy. This ensured that the principal reconstruction used the measured quantities provided by the dataset, while the independent calculations serve only as validation checks.
+
+\subsection{Independent Validation of Kinematic Variables}
+
+The consistency of the supplied and independently reconstructed kinematic quantities was assessed. This step was particularly important because an initially observed discrepancy in the transverse-momentum distributions required the reconstruction procedure to be checked independently before the supplied values could be used with confidence. For each validated quantity, the residual was defined as the difference between the reconstructed and supplied values. For angular quantities, the residual was wrapped into the interval $[-\pi,\pi]$ to account for the periodic nature of the azimuthal coordinate. Summary statistics were then calculated for the residual distributions, including their mean, standard deviation and maximum absolute deviation.
+
+The validation was performed most extensively for the primary dimuon sample. Equivalent checks were not repeated in full for every secondary sample where the same computational definitions and reconstruction functions were used, in order to avoid duplicating an already established validation procedure.
+
+\begin{table}[htbp]
+    \begin{center}
+    \begin{threeparttable}
+        \caption{Independent reconstruction validation statistics of the first muon candidate from the $Z \rightarrow \mu^+ \mu^-$ sample.}
+        \label{tab:validation_statistics}   
+            \begin{tabular}{ | l | r | r | r | }
+                \hline
+                \multicolumn{1}{|c|}{\textbf{Quantity}} & \multicolumn{1}{|c|}{\textbf{Mean Residual}} & \multicolumn{1}{|c|}{\textbf{Standard Deviation}} & \multicolumn{1}{|c|}{\textbf{Maximum Absolute Difference}} \\ \hline
+                $p_T$ (GeV) & 0.0501 & 15.0993 & 4762.091\\
+                $\eta$ & $-2.940 \times 10^{-6}$ & 0.0025 & 0.389 \\
+                $\phi$ (rad) & $3.554 \times 10^{-5}$ & 0.0121 & 2.100\\
+                \hline
+        \end{tabular}
+    \end{threeparttable}
+    \end{center}
+\end{table}
+
+It is evident from Table~\ref{tab:validation_statistics} that the reconstructed kinematic quantities are generally consistent with the supplied values, with small mean residuals and standard deviations. The negative sign for the mean residual of the pseudorapidity indicates a slight systematic bias in the opposite direction, however, the magnitude is still negligible.
+
+The significantly large maximum absolute difference in the transverse momentum is due to a small number of outlier events. Analysis of these anomalous events revealed that 279 events out of the total 100,000 events in the sample had a transverse momentum residual greater than $1 \, \text{GeV}$, which is only 0.279\% of the total sample. Owing to their small number, these anomalous events were expected to have a negligible impact on the study. These discrepancies most likely arose from isolated inconsistencies within the educational dataset rather than from the reconstruction procedure itself. Notebook 05 in the project source directory contains a more detailed discussion of these outliers.
+
+\FloatBarrier
+\FloatBarrier
+\subsection{Event Selection}
+
+The initial dimuon dataset contained a large number of events that did not necessarily correspond to the clean $Z\rightarrow\mu^+\mu^-$ sample required for the resonance analysis. A sequence of selection requirements was therefore applied to isolate events with kinematic properties consistent with the desired decay topology.
+
+The first selection criterion was to ensure that the two muons were global muons. Analysis of the dimuon sample revealed that 6,526 events had either one of the muons classified as a tracker muon, which is a muon that is reconstructed using only the inner tracking system of the CMS detector. Global muons are reconstructed by combining tracks measured in both the inner silicon tracker and the outer muon chambers through a global track fit. This requirement was implemented by checking the muon reconstruction type for each muon, and only retaining events where both muons were classified as global muons.
+
+The second selection criterion was that the two reconstructed muons must have opposite electric charges, as expected from the decay of a neutral parent particle. This requirement was implemented by checking the product of the charges of the two muons, and since the charges were $\pm 1$, events where this product was $-1$ were retained. Mathematically, the criterion can be expressed as:
+
+\begin{equation} Q_1Q_2 = -1. \end{equation}
+
+Then, the third selection criterion was a transverse-momentum requirement, subsequently applied to both the leading and subleading muons. In order to retain a transparent and symmetric selection, the same transverse-momentum threshold was applied to both muons. The threshold was set at $p_T > 20 \, \text{GeV}$, which is a common choice in high-energy physics analyses \cite{cms2019higgsww} to ensure that the selected muons are well above the detector's trigger and reconstruction thresholds, and to reduce background from low-momentum particles. This requirement was implemented by checking the transverse momentum of each muon, and only retaining events where both muons satisfied this condition.
+
+The fourth selection criterion was a pseudorapidity requirement applied to both muons to restrict the analysis to the detector's acceptance region, with the requirement that $|\eta| < 2.4$. This requirement was implemented by checking the absolute value of the pseudorapidity of each muon, and only retaining events where both muons satisfied this condition.
+
+Finally, the fifth selection criterion was a dimuon invariant-mass requirement applied to the thus selected events in order to isolate the resonance region. The selected interval was:
+
+\begin{equation} 60 \, \text{GeV} < M < 120 \, \text{GeV}. \end{equation}
+
+The effect of each requirement was recorded through the number of surviving events and the corresponding selection efficiency. This provided a quantitative measure of how strongly each criterion reduces the original sample.
+
+\subsection{Statistical and Peak-Fitting Methods}
+
+The selected invariant-mass distributions were characterised by fitting analytical resonance models to the observed histogram. Three models were considered: a Gaussian profile, a Breit--Wigner profile and a Voigt profile. Each resonance model was supplemented with a linear background to account for non-resonant contributions within the fitted mass interval.
+
+The parameters of each model were obtained using the nonlinear least-squares optimisation method ``curve\_fit" from SciPy. The fit was performed using the statistical Poisson counting uncertainties associated with each histogram bin, $\sigma_i=\sqrt{N_i}$, as the weighting uncertainty, where $N_i$ is the observed number of events in the $i$-th bin. Bins containing zero observed events were excluded from the $\chi^2$ calculation because the corresponding Poisson uncertainty is zero and would otherwise result in a division by zero.. Parameter uncertainties were subsequently obtained from the diagonal elements of the covariance matrix returned by the fitting procedure.
+
+The quality of each fitted model was assessed using several complementary statistical quantities. The chi-squared statistic measures the weighted squared difference between the observed histogram counts and the corresponding model prediction. It is mathematically represented as \cite{squires2001statistics}:
+
+\begin{equation} \chi^2 =\sum_i\left(\frac{y_i-f_i}{\sigma_i}\right)^2, \end{equation}
+
+where $y_i$ represents the observed number of events in bin $i$, $f_i$ is the fitted model value and $\sigma_i$ is the uncertainty assigned to that bin. The reduced chi-squared, derived as $\chi^2 / \nu$, was used to account for the number of degrees of freedom $\nu$ in each fit. Goodness-of-fit $p$-values were calculated from the upper tail of the chi-squared distribution. In addition, AIC \cite{akaike1974aic} and BIC \cite{schwarz1978bic} were used to compare models while accounting for differences in the number of fitted parameters.
+
+Residuals were also examined to identify systematic deviations between the observed spectrum and each fitted model. This provides information that is complementary to a single global goodness-of-fit statistic and allows differences in the shape of the residual distribution to be assessed.
+
+The width of each fitted resonance was quantified using its full width at half maximum (FWHM). For the Gaussian and Breit--Wigner models, analytical expressions for the FWHM were used, while the Voigt width was calculated using the computational formula described in section 2.7, equations (2.12, 2.13). The fitted peak position and width were then used to characterise the reconstructed resonance.
+
+For the $Z$-boson analysis, the Gaussian, Breit--Wigner and Voigt models were fitted over the selected resonance region. The same fitting framework was subsequently applied to the $J/\psi$ sample, allowing the suitability of the models to be compared across two substantially different resonance mass scales.
+
+\section{Results}
+
+\subsection{Kinematic Distributions}
+
+The reconstructed kinematic distributions were examined before applying the final invariant-mass selection, as described in the previous sections. The following figures in this section were derived from the simpler CMS dataset (first part of the project: 10,000 events).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\columnwidth]{\detokenize{figures/z_mumu_dimuon_transverse_momenta_part_1.png}}
+    \caption[Transverse momentum distributions of the two reconstructed muons.]{Transverse momentum distributions of the leading and subleading reconstructed muons. Most selected events contain muons with transverse momenta in the range of approximately 20$-$60 GeV, with the number of events decreasing towards larger transverse momenta. A small high-$p_T$ tail is also visible, corresponding to events containing more energetic muons. The two distributions are not identical, however, with the subleading muon distribution showing a more pronounced (larger number of peak events) concentration around 40$-$50 GeV. Visually, the leading muon's histogram is completely overlapped by the subleading muon, and is represented by the darker shade within the larger sub-leading muon's histogram.}
+    \label{fig:transverse_momentum_part_1}
+\end{figure}
+
+The pseudorapidity distributions extend across the detector acceptance considered in the analysis, as discussed in prior sections.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\columnwidth]{\detokenize{figures/z_mumu_dimuon_pseudorapidity_part_1.png}}
+    \caption[Pseudorapidity distributions of the two reconstructed muons.]{Pseudorapidity distributions of the leading and subleading reconstructed muons. The distributions are approximately centred around the central region, with events occurring on both sides of $\eta=0$.}
+    \label{fig:pseudorapidity_part_1}
+\end{figure}
+
+ The azimuthal distributions provided information about the relative directions of the reconstructed muons in the transverse plane. In particular, the two muons from a high-mass resonance are expected to exhibit a strong tendency towards opposite transverse directions. This behaviour becomes relevant to the invariant-mass reconstruction because the relative azimuthal separation enters directly into the mass calculation.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.82\columnwidth]{\detokenize{figures/z_mumu_dimuon_azimuthal_angle_part_1.png}}
+    \caption[Azimuthal angle distributions of the two reconstructed muons.]{Azimuthal angle momentum distributions of the leading and subleading reconstructed muons. It is evident from the figure that the two muons tend to exhibit a larger number of events on the opposite ends of the range of azimuthal angles.}
+    \label{fig:azimuthal_angle_part_1}
+\end{figure}
+
+\subsection{Event Selection}
+
+\begin{table}[htbp]
+    \begin{center}
+    \begin{threeparttable}
+        \caption{$Z \to \mu^+ \mu^-$ dimuon sample complete event selection cut flow summary.}
+        \label{tab:event_cut_flow}   
+            \begin{tabular}{ | l | r | r | }
+                \hline
+                \multicolumn{1}{|c|}{\textbf{Selection Step}} & \multicolumn{1}{|c|}{\textbf{Events Remaining}} & \multicolumn{1}{|c|}{\textbf{Step Selection Efficiency}} \\ \hline
+                Initial Dataset & 100,000 & --- \\
+                Global Muon Quality Cuts & 93,474 & 93.47\% \\
+                Opposite Charge Requirement	& 93,474 & 100.00\% \\
+                $p_T > 20 \, \text{GeV}$ & 5,758 & 6.16\% \\
+                Pseudorapidity ($\eta$) Cut & 5,758 & 100.00\% \\
+                Invariant Mass Window & 5,233 & 90.88\% \\
+                \hline
+        \end{tabular}
+    \end{threeparttable}
+    \end{center}
+\end{table}
+
+Following the event selection methods outlined in section 3.5, the results are depicted in Table~\ref{tab:event_cut_flow}. The 100\% step selection efficiency for the opposite charge requirement test and the pseudorapidity test indicate that the input dataset may already be OS-only, and the muon acceptance is $|\eta| < 2.4$ by construction.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.83\columnwidth]{\detokenize{figures/z_mumu_inv_mass_selection_part_2.png}}
+    \caption[Distribution of invariant mass of the dimuon events with the mass-selection window.]{Distribution of invariant mass of the dimuon events before selection processes are applied with the mass-selection window. The dashed red line and green line denote the minimum and maximum $M$ thresholds for filtering, i.e., 60 GeV and 120 GeV respectively.}
+    \label{fig:Z_mumu_inv_mass_selection}
+\end{figure}
+
+Fig.~\ref{fig:Z_mumu_inv_mass_selection} confirms that the mass window used for selection encases the main peak region, whilst removing the detector and experiment noise on the extreme ends of the spectrum. After five steps of selection criteria were applied, only 5,233 events remained for analysis, with a cumulative selection efficiency of only 5.23\%.
+
+\FloatBarrier
+\subsection{Invariant-Mass Reconstruction}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\columnwidth]{\detokenize{figures/z_mumu_selected_mass_spectra_part_2.png}}
+    \caption[$Z \rightarrow \mu^+\mu^-$ exact and massless approximation invariant mass distributions.]{Histogram plot comparing the distributions of the exact invariant masses and the massless approximation masses (in GeV) of the selected dimuon events. The solid dashed dark blue and red lines represent the exact and the massless approximation invariant mass peaks respectively. The solid black vertical line represents the PDG accepted value of the invariant mass of $Z$-boson \cite{pdgtakahashizboson2026review}.}
+    \label{fig:Z_mumu_inv_mass_selected_part_2}
+\end{figure}
+
+As depicted in Fig.~\ref{fig:Z_mumu_inv_mass_selected_part_2}, the reconstructed peak occurs close to 91 GeV, consistent with the expected $Z$-boson mass of approximately 91.2 GeV \cite{pdgtakahashizboson2026review}. The presence of a clear peak demonstrates that the kinematic information contained in the open-data sample is sufficient to recover the characteristic mass scale of the $Z$ resonance.
+
+The mass distribution also demonstrates the importance of the event-selection procedure. Before the final mass requirement, the distribution contains a broader population extending outside the region of interest. Restricting the analysis to 60 GeV $< M <$ 120 GeV, as denoted by equation (3.3) and section 3.5, isolates the dominant resonance and provides a suitable range for fitting its line shape.
+
+The exact invariant mass derivation, as discussed in section 2.1, was also applied to the $J/\psi$-meson resonance.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\columnwidth]{\detokenize{figures/jpsi_mumu_mass_spectrum_part_2.png}}
+    \caption[Reconstructed $J/\psi \rightarrow \mu^+\mu^-$ invariant-mass spectrum.]{Histogram plot comparing the distributions of the exact invariant masses (in GeV) of the selected $J/\psi$ dimuon events. The solid dark red line represents the peak of the reconstructed $J/\psi$-meson mass spectrum. The solid black vertical line represents the PDG accepted value of the invariant mass of $J/\psi$-meson \cite{pdgtakahashijpsi2026review}.}
+    \label{fig:jpsi_mumu_inv_mass_exact_part_2}
+\end{figure}
+
+The reconstructed peak occurs close to 3.094 GeV, showing excellent agreement with the $J/\psi$-meson mass of approximately 3.097 GeV \cite{pdgtakahashijpsi2026review}.
+
+From Fig.~\ref{fig:Z_mumu_inv_mass_selected_part_2} and Fig.~\ref{fig:jpsi_mumu_inv_mass_exact_part_2}, it is evident that for a narrow resonance spectrum like $J/\psi$, events are tightly clustered, therefore forcing the height of the peak to reach close to $5 \, \text{GeV}^{-1}$ on the normalised scale, to conserve the unitary area. Conversely, the broad $Z$-boson peak has its probability density spread across a much wider region, resulting in a significant lower peak height. Despite the difference in mass scale, both spectra exhibit the characteristic behaviour expected of resonant particle production: an enhancement in the event rate around a well-defined invariant mass. 
+
+\FloatBarrier
+\subsection{Validation of the Massless Approximation}
+
+The effect of neglecting the lepton rest mass was investigated by comparing the exact invariant-mass calculation with the corresponding massless approximation. For the $Z$-boson sample, the two methods produce essentially identical results at the precision relevant to the analysis, as shown in Fig.~\ref{fig:Z_mumu_inv_mass_selected_part_2}. Using the accepted value of the electron rest mass, $m_e \approx 0.511 \, \text{MeV}$ \cite{nist2022electronmass}, the same comparison was performed for the corresponding di-electron sample for the simplified dataset
+
+\begin{table}[htbp]
+    \begin{center}
+    \begin{threeparttable}
+        \caption[Comparison of exact and massless invariant-mass calculations for the $Z \rightarrow \mu^+ \mu^-$ and the $Z \rightarrow e^+ e^-$ sample.]{Comparison of exact and massless invariant-mass calculations for the $Z \rightarrow \mu^+ \mu^-$ and the $Z \rightarrow e^+ e^-$ sample for the simplified dataset.}
+        \label{tab:exact_massless_comparison_z_boson}   
+            \begin{tabular}{ | l | r | r | }
+                \hline
+                \multicolumn{1}{|c|}{\textbf{Quantity}} & \multicolumn{1}{|c|}{\boldmath {$Z \rightarrow \mu^+ \mu^-$}} & \multicolumn{1}{|c|}{\boldmath {$Z \rightarrow e^+ e^-$}} \\ \hline
+                Exact Peak (GeV) & 90.8770 & 91.4838$^\dagger$ \\
+                Approximate Peak (GeV) & 90.8767 & 91.4838$^\dagger$ \\
+                Peak Difference (MeV) & 0.2994 & $9.41 \times 10^{-6}$ \\
+                Mean Approximation Error (MeV) & 0.3075 & $7.10 \times 10^{-6}$ \\
+                Maximum Approximation Error (MeV) & 7.2060 & $2.84 \times 10^{-5}$ \\
+                Minimum Approximation Error (MeV) & 0.1881 & $4.36 \times 10^{-6}$ \\
+                Difference from PDG Value (GeV) & 0.3109 & 0.2959 \\
+                \hline
+        \end{tabular}
+        \begin{tablenotes}
+            \item $^\dagger$Values differ by $\approx \mathcal{O}(10^{-8}\,\text{GeV})$ at higher precision.
+        \end{tablenotes}
+    \end{threeparttable}
+    \end{center}
+\end{table}
+
+Table.~\ref{tab:exact_massless_comparison_z_boson} shows that the massless approximation for the di-electron sample has a significantly better agreement with the exact mass as compared to the dimuon sample, owing to the small electron rest mass value \cite{nist2022electronmass} in comparison to the muon rest mass \cite{nist2022muonnmass}.
+
+
+\FloatBarrier
+\subsection{Resonance Peak Fits}
+
+\begin{table}[H]
+    \begin{center}
+    \begin{threeparttable}
+        \caption{Comparison of Gaussian, Breit--Wigner and Voigt fit parameters and goodness-of-fit statistics for the $Z \to \mu^+ \mu^-$ invariant-mass resonance.}
+        \label{tab:statistical_comparison_Z_peaks}   
+            \begin{tabular}{ | l | r | r | r | }
+                \hline
+                \multicolumn{1}{|c|}{\textbf{Metric}} & \multicolumn{1}{|c|}{\textbf{Gaussian}} & \multicolumn{1}{|c|}{\textbf{Breit--Wigner}} & \multicolumn{1}{|c|}{\textbf{Voigt}}\\ \hline
+                FWHM [GeV] & $4.883 \pm 0.088$ & $4.128 \pm 0.134$ & $4.419 \pm 0.148$ \\
+                Relative Width & 0.054 & 0.045 & 0.048 \\
+                $\chi^2$ & 116.30 & 75.15 & 65.39 \\
+                Degrees of Freedom (ndf) & 62 & 62 & 61 \\
+                Reduced $\chi^2$ & 1.88 & 1.21 & 1.07 \\
+                $p$-value & $3.6 \times 10^{-5}$ & 0.12 & 0.33 \\
+                AIC & 126.30 & 85.15 & 77.39 \\
+                BIC & 137.32 & 96.18 & 90.61 \\
+                \hline
+        \end{tabular}
+    \end{threeparttable}
+    \end{center}
+\end{table}
+
+As depicted in Table~\ref{tab:statistical_comparison_Z_peaks}, the Voigt profile gives the best description of the three models considered. The Breit--Wigner model provides a substantially better description than the Gaussian model, which the data strongly disfavours as is evident from its $p$-value. The $p$-value also indicates that the Breit--Wigner line shape is compatible with the observed distribution at conventional significance levels.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.86\columnwidth]{\detokenize{figures/z_mumu_mass_spectrum_curve_fits_part_2.png}}
+    \caption[Curve fits overlaid to the $Z \rightarrow \mu^+\mu^-$ invariant mass distribution.]{Reconstructed $Z \rightarrow \mu^+\mu^-$ invariant mass distribution (in GeV) overlaid with Gaussian, Breit--Wigner, and Voigt fit profiles. Points with error bars represent the observed dimuon counts with Poisson uncertainties, while solid colored lines depict the fitted model shapes, and the dashed black vertical line denotes the accepted PDG invariant mass value of the $Z$-boson \cite{pdgtakahashizboson2026review}.}
+    \label{fig:z_mumu_curve_fits}
+\end{figure}
+
+The fitted curves overlaid on the invariant mass distribution in Fig.~\ref{fig:z_mumu_curve_fits} are in the range of 80--100 GeV, which differs from the 60--120 GeV mass window used for selection, to ensure a cleaner, more magnified picture of the central peak region. The figure demonstrates that the Gaussian fit shows larger systematic deviations from the data, particularly away from the central peak. The Breit--Wigner model follows the overall resonance more closely, while the Voigt profile gives the closest agreement across the fitted mass range.
+
+\FloatBarrier
+\section{Discussion}
+
+\subsection{Reconstruction of Invariant Mass}
+
+The independent reconstruction of the kinematic quantities provides an additional check on the calculation. The close agreement between the supplied and independently reconstructed quantities indicates that the subsequent invariant-mass calculation is not being driven by an inconsistent implementation of the basic kinematics. The comparison between the exact and massless formulations provides a further validation, with the two approaches producing effectively indistinguishable results for the high-energy lepton pairs considered, as evident from Table~\ref{tab:exact_massless_comparison_z_boson} and Fig.~\ref{fig:Z_mumu_inv_mass_selected_part_2}.
+
+Overall, the reconstruction should therefore be regarded as successful at the level appropriate for an educational open-data analysis. It recovers the expected resonance and provides physically sensible kinematic distributions while also allowing the main stages of the reconstruction to be independently checked.
+
+\subsection{Model Selection}
+
+The model comparison therefore suggests that the measured resonance is influenced by more than its intrinsic Breit--Wigner line shape. Experimental or dataset-level resolution effects can broaden the observed distribution, making a convolution of the two effects a more appropriate empirical description. The result should not, however, be interpreted as a precision determination of the physical $Z$-boson width. The simplified dataset does not contain sufficient detector-level information to separate intrinsic and instrumental contributions with the precision required for such a measurement. 
+
+The same fitting framework applied to the $J/\psi$ resonance provides a useful extension of the analysis. The Voigt model again performs substantially better than either the Gaussian or Breit--Wigner models across different statistical tests. The comparison also demonstrates that model selection should not be based solely on visual agreement with a histogram. The combination of goodness-of-fit $\chi^2$, reduced $\chi^2$ and $p$-value tests, as well as AIC \cite{akaike1974aic} and BIC \cite{schwarz1978bic}, provides a more systematic basis for assessing competing descriptions. In this analysis, all of these measures consistently favour the Voigt model, as depicted in Table~\ref{tab:statistical_comparison_Z_peaks}.
+
+\subsection{Limitations of the Simplified Dataset}
+
+The main limitation of the analysis is the simplified nature of the available CMS Open Data sample. In particular, the simplified sample does not provide all of the information that would normally be required to study detector efficiency, trigger efficiency, reconstruction efficiency, momentum resolution and detailed background composition. The analysis also uses relatively simple background models. A linear background is sufficient to provide a convenient local description over the chosen fitting range, but it does not necessarily represent the full physical background processes contributing to the sample.
+
+However, despite these limitations, the dataset remains highly suitable for the aims of this project. It contains enough information to demonstrate the complete chain from reconstructed lepton and meson kinematics to event selection, invariant-mass reconstruction, resonance identification and statistical line-shape comparison. The simplifications therefore limit the precision of the conclusions rather than preventing the underlying physics from being demonstrated.
+
+\section{Conclusion}
+
+The analysis demonstrates how relatively accessible reconstructed collider data can be used to recover fundamental resonance properties and investigate the relationship between physical line shapes and observed experimental distributions. While the simplified dataset prevents precision measurements of quantities such as the intrinsic resonance widths, it provides an effective environment for studying the principles of four-momentum reconstruction, event selection, resonance spectroscopy and statistical model comparison.
+
+Overall, the project successfully connects the underlying relativistic kinematics of particle decays with a practical computational analysis of experimental data, reproducing the characteristic signatures of both the $Z$ and $J/\psi$ resonances and demonstrating the usefulness of invariant-mass spectroscopy as a tool in experimental particle physics.
+
+\bibliographystyle{ieeetr}
+\bibliography{references}
+
+%TC:ignore
+This document contains \totalwords{} words.
+%TC:endignore
+
+\end{document}
