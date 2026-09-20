@@ -174,7 +174,8 @@ def selection_summary(
     df_after,
     previous_selection_name="Previous Selection",
     current_selection_name="Current Selection",
-    caption=""
+    caption="",
+    initial_count=100000
 ):
     """
     Provides a summary of the selection process, including the number of events remaining after each selection stage.
@@ -191,14 +192,14 @@ def selection_summary(
         The name of the current selection stage. The default is "Current Selection".
     caption: str, optional
         The caption for the summary table.
+    initial_count: int, optional
+        The initial count for the number of events. Default is 100000.
 
     Returns
     -------
     pandas.io.formats.style.Styler
         A styled DataFrame summarizing the selection process.
     """
-
-    initial_count = 100000
 
     selection_summary = (
         pd.DataFrame({

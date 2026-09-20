@@ -1,4 +1,4 @@
-cff-version: 1.1.0
+cff-version: 1.2.0
 
 title: "Invariant Mass Spectroscopy with CMS Open Data: Reconstruction and Characterisation of Z and J/psi Resonances"
 
@@ -16,9 +16,9 @@ identifiers:
   - type: doi
     value: 10.5281/zenodo.22843466
 
-version: "1.0.0"
+version: "1.0.2"
 
-date-released: 2026-09-19
+date-released: 2026-09-20
 
 license: GPL-3.0
 

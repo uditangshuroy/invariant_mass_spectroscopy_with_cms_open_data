@@ -227,7 +227,7 @@ def azimuthal_angle_residual(phi_calculated, phi_provided):
     return residual
 
 
-def anamolous_events_validation(
+def anomalous_events_validation(
     dataset,
     pt_calc,
     pt_residual,

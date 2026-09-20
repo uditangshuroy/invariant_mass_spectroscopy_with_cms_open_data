@@ -36,8 +36,8 @@ def gaussian_peak(x, A, mu, sigma, c0, c1):
 
     Returns
     -------
-    tuple of array-like
-        The fitted values and the FWHM of the Gaussian peak.
+    array-like
+        The fitted values of the Gaussian peak.
     """
 
     return A * np.exp(-0.5 * ((x - mu) / sigma)**2) + c0 + c1 * (x - mu)
@@ -87,8 +87,8 @@ def breit_wigner_peak(x, A, mu, gamma, c0, c1):
 
     Returns
     -------
-    tuple of array-like
-        The fitted values and the FWHM of the Breit-Wigner peak.
+    array-like
+        The fitted values of the Breit-Wigner peak.
     """
 
     return A * gamma**2 / ((x - mu)**2 + gamma**2) + c0 + c1 * (x - mu)
@@ -140,8 +140,8 @@ def voigt_peak(x, A, mu, sigma, gamma, c0, c1):
 
     Returns
     -------
-    tuple of array-like
-        The fitted values and the FWHM of the Voigt peak.
+    array-like
+        The fitted values of the Voigt peak.
     """
 
     return A * voigt_profile(x - mu, sigma, gamma) + c0 + c1 * (x - mu)

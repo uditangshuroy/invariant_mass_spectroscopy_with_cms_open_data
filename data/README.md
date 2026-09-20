@@ -30,7 +30,7 @@ Find the dataset and other information here: <https://opendata.cern.ch/record/54
 
 ### $Z \rightarrow \mu^+ \mu^-$: (Notebook 5-7)
 
-An event was selected if there were two muons in the event with $p_T > 20 \,\text{GeV}$ and $|\eta| < 2.1$ and the invariant mass of the two muons was $> 60 \,\text{GeV}$ and $< 120\,\text{GeV}$.
+An event was selected if there were two muons in the event, both with $|\eta| < 2.4$, at least one muon was a global muon, the invariant mass of the two muons was $> 0.3 \,\text{GeV}$ and $< 300 \,\text{GeV}$, and they have opposite-sign charge.
 
 ### $J/\psi \rightarrow \mu^+ \mu^-$: (Notebook 8)
 
